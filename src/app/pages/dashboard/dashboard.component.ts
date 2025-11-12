@@ -55,7 +55,7 @@ export class DashboardComponent {
 
   ngOnInit() {
     const expiry = localStorage.getItem('cookieExpiryAt');
-    if (expiry && new Date() > new Date(expiry)) {
+    if (!expiry || (expiry && new Date() > new Date(expiry))) {
       this.logoutRevision();
     }
 
@@ -69,6 +69,13 @@ export class DashboardComponent {
       }
     }
 
+  }
+
+  profileClick(){
+    const expiry = localStorage.getItem('cookieExpiryAt');
+    if (!expiry || (expiry && new Date() > new Date(expiry))) {
+      this.logoutRevision();
+    }
   }
 
   // 🔄 Sync data

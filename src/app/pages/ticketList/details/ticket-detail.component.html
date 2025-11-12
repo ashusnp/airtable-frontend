@@ -53,9 +53,11 @@
   <!-- RIGHT PANEL -->
   <div class="ticket-right">
     <h3>🕓 Revision History</h3>
-
+    <div *ngIf="!loading && errorMessage" class="error-message">
+      <p>{{ errorMessage }}</p>
+    </div>
     <div *ngIf="loading" class="loading">Loading revisions...</div>
-    <div *ngIf="!loading && !revisions.length" class="empty">
+    <div *ngIf="!loading && !revisions.length && !errorMessage" class="empty">
       No revision history found.
     </div>
 

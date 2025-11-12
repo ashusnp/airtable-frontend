@@ -31,6 +31,7 @@ export class TicketDetailComponent {
   @Input() record: any;
   revisions: Revision[] = [];
   loading = false;
+  errorMessage = '';
 
   constructor(
     private airtable: AirtableApiService,
@@ -57,7 +58,27 @@ export class TicketDetailComponent {
         }));
         this.loading = false;
       },
-      error: () => (this.loading = false),
+      error: (err: any) => {
+
+        this.loading = false;
+
+        // Handle different error formats
+        const status = err?.status || err?.error?.status || 0;
+        const message = err?.error?.message || err?.message || 'Unknown error';
+
+        // Check if it's a 403 error (authentication/cookie issue)
+        if (status === 403) {
+          console.log('🔒 403 error detected - clearing localStorage');
+          // Clear revision-related localStorage items
+          localStorage.removeItem('isUserLoggedIn');
+          localStorage.removeItem('cookieExpiryAt');
+
+          // Set error message
+          this.errorMessage = message || 'Authentication required. Please login again.';
+        } else {
+          this.errorMessage = message || 'Failed to load revision history. Please try again.';
+        }
+      },
     });
   }
 
