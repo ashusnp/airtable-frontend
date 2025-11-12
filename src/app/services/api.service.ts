@@ -11,7 +11,6 @@ export interface RevisionPoint { name: string; value: number; }
 export class AirtableApiService {
   private baseUrl = `${environment.API_BASE_URL}`;
   constructor(private http: HttpClient) {}
-  // Replace these with real HTTP calls to your Node v22 backend
   getBases(): Observable<any> {
     return this.http.get(`${this.baseUrl}/airtable/bases`, { withCredentials: true });
   }

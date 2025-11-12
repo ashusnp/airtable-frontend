@@ -1,17 +1,10 @@
-<div class="wrap">
-  <mat-card>
-    <h2>Connect your GitHub</h2>
-    <p>Sign in with GitHub to continue.</p>
+<div class="login-wrap">
+    <mat-card class="card">
+      <h2 class="title">Airtable Integration</h2>
+      <p class="subtitle">Authenticate with Airtable to continue</p>
 
-    <button
-      mat-raised-button
-      color="primary"
-      (click)="connect()"
-      [disabled]="loading()"
-    >
-      {{ loading() ? "Redirecting..." : "Connect with GitHub" }}
-    </button>
-
-    <p *ngIf="error()" style="color: #c00; margin-top: 1rem">{{ error() }}</p>
-  </mat-card>
-</div>
+      <button mat-raised-button color="primary" class="btn" (click)="connect()">
+        <mat-icon>link</mat-icon>&nbsp;Connect to Airtable
+      </button>
+    </mat-card>
+  </div>

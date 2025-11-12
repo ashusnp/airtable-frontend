@@ -14,8 +14,4 @@ export class AirtableAuthService {
       withCredentials: true,
     });
   }
-  disconnect() {
-    this.connected.set(false);
-    document.cookie = 'airtable_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC;';
-  }
 }

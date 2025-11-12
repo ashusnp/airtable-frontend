@@ -1,11 +1,5 @@
-.wrap {
-  padding: 2rem;
-  display: grid;
-  place-items: center;
-}
-mat-card {
-  width: 360px;
-  padding: 1rem;
-  display: grid;
-  gap: 1rem;
-}
+ .login-wrap { min-height:100vh; display:flex; align-items:center; justify-content:center; background:#f6f7fb; }
+    .card { width:400px; padding:32px; text-align:center; }
+    .title { margin:0 0 8px; }
+    .subtitle { color:#666; margin-bottom:24px; }
+    .btn { width:100%; }
