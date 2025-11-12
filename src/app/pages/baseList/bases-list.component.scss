@@ -1,0 +1,38 @@
+.ag-theme-alpine {
+  --ag-font-size: 14px;
+  --ag-row-height: 36px;
+  border-radius: 8px;
+}
+
+.ag-theme-alpine .ag-root-wrapper {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.grid-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.full-grid {
+  width: 100%;
+  height: 'auto !important'; // adjust depending on header/footer height
+  min-height: 400px;
+  border-radius: 8px;
+}
+
+:host ::ng-deep .ag-root-wrapper {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+:host ::ng-deep .ag-theme-alpine {
+  --ag-borders: none;
+  --ag-header-height: 42px;
+  --ag-row-height: 42px;
+  --ag-font-size: 14px;
+  --ag-background-color: #fff;
+  --ag-odd-row-background-color: #fafafa;
+  width: 100% !important;
+}

@@ -1,0 +1,15 @@
+.grid-wrapper {
+  width: 100%;
+  display: block;
+  // Remove hardcoded heights, let grid expand naturally
+  .ag-theme-alpine {
+    width: 100%;
+    // the next line ensures grid grows with its content
+    height: auto !important;
+  }
+
+  // if inside Material tabs, allow content scroll separately
+  ::ng-deep .mat-mdc-tab-body-content {
+    overflow: visible !important;
+  }
+}

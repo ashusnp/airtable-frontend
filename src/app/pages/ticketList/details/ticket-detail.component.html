@@ -1,0 +1,95 @@
+<div class="ticket-container" *ngIf="record">
+  <!-- LEFT PANEL -->
+  <div class="ticket-left">
+    <h2>🎫 Ticket Details</h2>
+
+    <div class="ticket-fields">
+      <div *ngFor="let field of getFieldEntries()" class="field-row">
+        <div class="label">{{ field[0] }}:</div>
+
+        <div class="value">
+          <!-- Handle images -->
+          <ng-container *ngIf="isArray(field[1]) && field[1][0]?.url">
+            <div class="photo-list">
+              <img *ngFor="let img of field[1]" [src]="img.thumbnails?.small?.url || img.url" alt="attachment" />
+            </div>
+          </ng-container>
+
+          <!-- Handle arrays -->
+          <ng-container *ngIf="isArray(field[1]) && !field[1][0]?.url">
+            {{ field[1].join(', ') }}
+          </ng-container>
+
+          <!-- Handle objects -->
+          <ng-container *ngIf="isObject(field[1])">
+            <div class="object-display">
+              <div *ngIf="field[1].value" class="ai-section">
+                <mat-icon color="primary">smart_toy</mat-icon>
+                {{ field[1].value }}
+              </div>
+              <div *ngIf="!field[1].value">{{ getDisplayValue(field[1]) }}</div>
+            </div>
+          </ng-container>
+
+          <!-- Default text -->
+          <ng-container *ngIf="
+              !isArray(field[1]) &&
+              !isObject(field[1]) &&
+              field[1] !== undefined &&
+              field[1] !== null
+            ">
+            {{ field[1] }}
+          </ng-container>
+        </div>
+      </div>
+    </div>
+
+    <button mat-raised-button color="primary" (click)="loadRevisions()" [disabled]="loading">
+      <mat-icon *ngIf="loading" class="spin">autorenew</mat-icon>
+      {{ loading ? 'Refreshing...' : 'Refresh Revisions' }}
+    </button>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="ticket-right">
+    <h3>🕓 Revision History</h3>
+
+    <div *ngIf="loading" class="loading">Loading revisions...</div>
+    <div *ngIf="!loading && !revisions.length" class="empty">
+      No revision history found.
+    </div>
+
+    <div *ngFor="let rev of revisions" class="revision-card">
+      <div class="rev-header">
+        <img class="avatar" [src]="rev.authoredAvatar || 'https://static.airtable.com/images/userIcons/user_icon_3.png'"
+          alt="avatar" />
+        <div class="rev-info">
+          <b>{{ rev.authoredName }}</b>
+          <small>{{ rev.authoredEmail }}</small>
+          <div class="rev-time">
+            <mat-icon>schedule</mat-icon>
+            {{ rev.createdDate | date: 'MMM d, y, h:mm a' }}
+          </div>
+        </div>
+      </div>
+
+      <div class="rev-body">
+        <div class="column-title">{{ rev.columnName | uppercase }}</div>
+
+        <!-- Styled old/new values -->
+        <div class="change-tags" *ngIf="rev.newValue">
+          <div *ngFor="let newVal of rev.newValue?.split('\n'); let i = index"
+            [class]="i === 0 ? 'tag tag-add' : 'tag tag-remove'">
+            <span *ngIf="newVal.trim()">
+              <mat-icon class="icon">{{ i === 0 ? 'add' : 'remove' }}</mat-icon>
+              {{ newVal.trim() }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <mat-divider></mat-divider>
+    </div>
+
+  </div>
+</div>

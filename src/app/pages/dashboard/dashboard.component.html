@@ -1,0 +1,110 @@
+<div class="dashboard-container">
+  <!-- Top App Bar -->
+  <mat-toolbar color="primary" class="app-toolbar">
+    <div class="toolbar-left">
+      <h2>📊 Airtable Integration Dashboard</h2>
+    </div>
+
+    <div class="toolbar-right">
+      <!-- Sync Button -->
+      <button
+        mat-stroked-button
+        color="accent"
+        class="sync-btn"
+        (click)="syncNow()"
+        [disabled]="loading"
+      >
+        <mat-icon *ngIf="!loading">sync</mat-icon>
+        <mat-progress-spinner
+          *ngIf="loading"
+          diameter="18"
+          mode="indeterminate"
+          color="accent"
+          strokeWidth="3"
+        ></mat-progress-spinner>
+        {{ loading ? 'Syncing...' : 'Sync Now' }}
+      </button>
+
+      <!-- Profile Menu -->
+      <button
+        mat-icon-button
+        [matMenuTriggerFor]="profileMenu"
+        aria-label="Profile menu"
+        class="profile-btn"
+      >
+        <mat-icon>account_circle</mat-icon>
+      </button>
+
+      <mat-menu #profileMenu="matMenu">
+        <ng-container *ngIf="isOAuthLoggedIn">
+          <button mat-menu-item disabled>
+            <mat-icon>person</mat-icon>
+            <span>{{ userName || 'Logged in via OAuth' }}</span>
+          </button>
+          <mat-divider></mat-divider>
+
+          <ng-container *ngIf="!isRevisionLoggedIn; else loggedInBlock">
+            <button mat-menu-item (click)="openRevisionLoginDialog()">
+              <mat-icon>lock</mat-icon>
+              <span>Revision Login</span>
+            </button>
+          </ng-container>
+
+          <ng-template #loggedInBlock>
+            <button mat-menu-item (click)="logoutRevision()">
+              <mat-icon>lock_open</mat-icon>
+              <span>Logout Revision</span>
+            </button>
+          </ng-template>
+
+          <mat-divider></mat-divider>
+          <button mat-menu-item (click)="logoutMain()">
+            <mat-icon>logout</mat-icon>
+            <span>Logout (Main)</span>
+          </button>
+        </ng-container>
+      </mat-menu>
+    </div>
+  </mat-toolbar>
+
+  <!-- Selected Base & Table -->
+  <section class="selection-info" *ngIf="selectedBaseId || selectedTableId">
+    <div class="selection-item" *ngIf="selectedBaseId">
+      <mat-icon color="primary">category</mat-icon>
+      <span>Base: {{ selectedBase?.name }}</span>
+    </div>
+    <div class="selection-item" *ngIf="selectedTableId">
+      <mat-icon color="primary">table_chart</mat-icon>
+      <span>Table: {{ selectedTable?.name }}</span>
+    </div>
+  </section>
+
+  <!-- Tabs Section -->
+  <mat-card class="tabs-wrapper">
+    <mat-tab-group animationDuration="300ms">
+      <mat-tab label="Projects (Bases)">
+        <div class="tab-content">
+          <app-bases-list (baseSelected)="onBaseSelected($event)"></app-bases-list>
+        </div>
+      </mat-tab>
+
+      <mat-tab label="Tables">
+        <div class="tab-content">
+          <app-tables-list
+            [baseId]="selectedBaseId"
+            (tableSelected)="onTableSelected($event)"
+          ></app-tables-list>
+        </div>
+      </mat-tab>
+
+      <mat-tab label="Tickets">
+        <div class="tab-content">
+          <app-tickets-list
+            [baseId]="selectedBaseId"
+            [tableId]="selectedTableId"
+          ></app-tickets-list>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card>
+</div>

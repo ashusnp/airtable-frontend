@@ -1,0 +1,13 @@
+<div class="grid-container">
+  <ag-grid-angular
+    class="ag-theme-alpine full-grid"
+    [rowData]="rowData"
+    [columnDefs]="columnDefs"
+    rowSelection="single"
+    [pagination]="true"
+    [paginationPageSize]="20"
+    [domLayout]="'normal'"
+    (gridReady)="onGridReady($event)"
+    (rowClicked)="onRowClicked($event)"
+  ></ag-grid-angular>
+</div>

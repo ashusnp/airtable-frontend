@@ -1,0 +1,17 @@
+<div class="wrap">
+  <mat-card>
+    <h2>Connect your GitHub</h2>
+    <p>Sign in with GitHub to continue.</p>
+
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="connect()"
+      [disabled]="loading()"
+    >
+      {{ loading() ? "Redirecting..." : "Connect with GitHub" }}
+    </button>
+
+    <p *ngIf="error()" style="color: #c00; margin-top: 1rem">{{ error() }}</p>
+  </mat-card>
+</div>

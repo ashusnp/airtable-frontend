@@ -1,0 +1,31 @@
+<h2 mat-dialog-title>🔐 Airtable Revision Login</h2>
+
+<mat-dialog-content>
+  <p class="text-muted">Enter your Airtable cookie password.</p>
+
+  <mat-form-field appearance="outline" class="w-100">
+    <mat-label>Password</mat-label>
+    <input placeholder="Enter your Airtable password" [disabled]="mfaRequired" matInput [(ngModel)]="password" type="password" />
+  </mat-form-field>
+
+  <div *ngIf="mfaRequired">
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>MFA Code</mat-label>
+      <input matInput [(ngModel)]="mfaCode" />
+    </mat-form-field>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-stroked-button (click)="dialogRef.close()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="onLogin()" [disabled]="loading">
+    <mat-progress-spinner
+      *ngIf="loading"
+      diameter="18"
+      mode="indeterminate"
+      strokeWidth="3"
+      color="accent"
+    ></mat-progress-spinner>
+    Login
+  </button>
+</mat-dialog-actions>

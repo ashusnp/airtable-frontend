@@ -1,0 +1,26 @@
+.grid-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.full-grid {
+  width: 100%;
+  height: 420px; // adjust depending on your tab layout
+  border-radius: 8px;
+}
+
+:host ::ng-deep .ag-root-wrapper {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+:host ::ng-deep .ag-theme-alpine {
+  --ag-borders: none;
+  --ag-header-height: 42px;
+  --ag-row-height: 42px;
+  --ag-font-size: 14px;
+  --ag-background-color: #fff;
+  --ag-odd-row-background-color: #fafafa;
+  width: 100% !important;
+}

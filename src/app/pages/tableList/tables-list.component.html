@@ -1,0 +1,16 @@
+<div *ngIf="!baseId" class="text-center text-gray-600 p-4">
+  Please select a Base first.
+</div>
+
+<div *ngIf="baseId" class="grid-container">
+  <ag-grid-angular
+    class="ag-theme-alpine full-grid"
+    [rowData]="rowData"
+    [columnDefs]="columnDefs"
+    rowSelection="single"
+    [pagination]="true"
+    [paginationPageSize]="20"
+    (gridReady)="onGridReady($event)"
+    (rowClicked)="onRowClicked($event)"
+  ></ag-grid-angular>
+</div>
