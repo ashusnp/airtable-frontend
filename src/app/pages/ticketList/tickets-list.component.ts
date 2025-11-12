@@ -45,6 +45,7 @@ export class TicketsListComponent implements OnChanges {
   constructor(private airtable: AirtableApiService, private matDialog: MatDialog) {}
 
   ngOnChanges(changes: SimpleChanges): void {
+    console.log('Changes in TicketsListComponent', changes, this.tableId);
     if (this.gridApi && this.baseId && this.tableId) {
       this.setupDatasource();
     }
@@ -69,7 +70,7 @@ export class TicketsListComponent implements OnChanges {
             const rows = res.data || [];
             this.totalRecords = res.total || rows.length;
 
-            if (rows.length > 0 && this.columnDefs.length === 0) {
+            if (rows.length > 0) {
               this.generateColumns(rows[0]);
             }
 
@@ -93,6 +94,7 @@ export class TicketsListComponent implements OnChanges {
       { headerName: 'Record ID', field: 'recordId', minWidth: 150 },
       { headerName: 'Created Time', field: 'createdTime', minWidth: 180 },
     ];
+    // console.log('fields', fields);
     const fieldCols: ColDef[] = fields.map((key) => ({
       headerName: key,
       field: `fields.${key}`,
