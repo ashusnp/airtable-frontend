@@ -16,6 +16,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { Router } from '@angular/router';
+import { AirtableAuthService } from '../../services/auth.service';
 
 @Component({
   standalone: true,
@@ -35,7 +36,7 @@ import { Router } from '@angular/router';
     MatDividerModule,
     MatMenuModule,
     MatProgressSpinnerModule,
-    MatToolbarModule
+    MatToolbarModule,
   ],
 })
 export class DashboardComponent {
@@ -51,16 +52,25 @@ export class DashboardComponent {
   cookieExpiryAt = localStorage.getItem('cookieExpiryAt');
   userName = 'Admin User'; // can be replaced with OAuth user info
 
-  constructor(private airtable: AirtableApiService, private dialog: MatDialog, private router: Router) {}
+  constructor(
+    private airtable: AirtableApiService,
+    private dialog: MatDialog,
+    private router: Router,
+    private auth: AirtableAuthService
+  ) {}
 
   ngOnInit() {
-    const expiry = localStorage.getItem('cookieExpiryAt');
-    if (!expiry || (expiry && new Date() > new Date(expiry))) {
-      this.logoutRevision();
-    }
-
     const userData = localStorage.getItem('user');
-    if (userData) {
+    if (!userData) {
+      this.auth.checkAuth().subscribe({
+        next: (user: any) => {
+          if (user?.email) {
+            localStorage.setItem('user', JSON.stringify(user));
+            this.userName = user.email || '';
+          }
+        },
+      });
+    } else {
       try {
         const parsed = JSON.parse(userData);
         this.userName = parsed.email || '';
@@ -69,9 +79,13 @@ export class DashboardComponent {
       }
     }
 
+    const expiry = localStorage.getItem('cookieExpiryAt');
+    if (!expiry || (expiry && new Date() > new Date(expiry))) {
+      this.logoutRevision();
+    }
   }
 
-  profileClick(){
+  profileClick() {
     const expiry = localStorage.getItem('cookieExpiryAt');
     if (!expiry || (expiry && new Date() > new Date(expiry))) {
       this.logoutRevision();
@@ -114,7 +128,8 @@ export class DashboardComponent {
   logoutMain(): void {
     this.isOAuthLoggedIn = false;
     this.logoutRevision();
-    document.cookie = "myCookie=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie =
+      'myCookie=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
     localStorage.clear();
     this.airtable.logout().subscribe(() => {
       this.router.navigateByUrl('/login');
@@ -123,7 +138,7 @@ export class DashboardComponent {
 
   // 🧱 Base / Table Selection
   onBaseSelected(base: any): void {
-    if(this.selectedBaseId === base.baseId) {
+    if (this.selectedBaseId === base.baseId) {
       return;
     }
     this.selectedBaseId = base.baseId;
